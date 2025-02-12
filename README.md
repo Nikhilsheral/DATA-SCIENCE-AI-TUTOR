@@ -1,2 +1,28 @@
-# DATA-SCIENCE-AI-TUTOR
-Data Science tutor is a virtual assistant performs queries related to data science. In this AI assistant, It is intergrated with Google AI "Gemini Flash 2.0 " version
+
+import streamlit as st
+import google.generativeai as ai
+
+ai.configure(api_key="YOUR API_KEY")
+
+sys_prompt = """You are a helpful AI Tutor for Data Science. 
+                Students will ask you doubts related to various topics in data science.
+                You are expected to reply in as much detail as possible. 
+                Make sure to take examples while explaining a concept.
+                In case if a student ask any question outside the data science scope, 
+                politely decline and tell them to ask the question from data science domain only.
+                Always include a helpful statement at the end saying that 
+                'In case if your query is not resolved, feel free to click on this link:
+                innomatics.in to get in touch with our mentor in a 1:1 zoom call"""
+
+gemini_model = ai.GenerativeModel(model_name="models/gemini-1.5-pro", system_instruction=sys_prompt)
+
+st.title("Data Science/AI TUTOR 🎓 ")
+
+user_input = st.text_area(label="Enter your Question", placeholder="Explain the concept of for loops")
+
+btn_click = st.button("Generate ⚛️")
+
+if btn_click == True:
+    response = gemini_model.generate_content(user_input)
+    print("OUTPUT ON TERMINAL: ", len(response.text))
+    st.write(response.text)
